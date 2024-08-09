@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz de Diagnóstico de Maturidade de Empresa</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        h1 {
+            margin-bottom: 30px;
+            color: #008080;
+        }
+        .question {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        .rating {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+        .rating button {
+            margin: 0 5px;
+            padding: 10px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            background-color: #008080;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .rating button:hover {
+            background-color: #005959;
+        }
+        .rating button.selected {
+            background-color: #005959;
+        }
+        #nextBtn {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            background-color: #008080;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #nextBtn:hover {
+            background-color: #005959;
+        }
+        #result {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #ddd;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background-color: #008080;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        .progress-bar-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Quiz de Diagnóstico de Maturidade de Empresa</h1>
+    <div id="question-container">
+        <!-- Questão atual será exibida aqui -->
+    </div>
+    <div id="rating-container">
+        <!-- Botões de avaliação serão exibidos aqui -->
+    </div>
+    <div class="progress-bar">
+        <div class="progress-bar-fill" id="progress-bar-fill"></div>
+        <div class="progress-bar-text" id="progress-bar-text"></div>
+    </div>
+    <button id="nextBtn" disabled>Próxima</button>
+    <div id="result"></div>
+
+    <script>
+        const questions = [
+            "O modelo de negócios da empresa está claro em todos seus componentes: clientes, proposta de valor, canais, relacionamento, fontes de receitas, recursos-chave, parceiros-chave, atividades-chave e estrutura de custos",
+            "A diretoria da empresa dedica a maior parte do seu tempo em estratégias de negócio, pensando em quais serão e como dar os próximos passos",
+            "A empresa tem estratégias claras para gerenciar e compartilhar o conhecimento entre os colaboradores",
+            "A liderança da companhia monitora ativamente as tendências que podem afetar o segmento, sejam eles fatores nacionais ou internacionais",
+            "A companhia tem indicadores estratégicos claros e pessoas responsáveis por acompanhá-los constantemente",
+            "Todas as decisões estratégicas são tomadas tendo em vista a sustentabilidade e saúde financeira da empresa",
+            "Todas as informações e conhecimento da companhia estão organizados e podem ser acessados por colaboradores com facilidade e agilidade",
+            "A liderança da empresa tem clareza sobre quais são seus concorrentes, seus diferenciais competitivos e seu market share",
+            "A estrutura societária e organização financeira está preparada para receber investimento estratégicos caso a oportunidade apareça",
+            "A empresa tem processos estabelecidos para gerar inovação contínua em produtos, serviços e/ou modelo de negócios"
+        ];
+
+        const questionContainer = document.getElementById('question-container');
+        const ratingContainer = document.getElementById('rating-container');
+        const nextBtn = document.getElementById('nextBtn');
+        const resultDiv = document.getElementById('result');
+        const progressBarFill = document.getElementById('progress-bar-fill');
+        const progressBarText = document.getElementById('progress-bar-text');
+
+        let currentQuestionIndex = 0;
+        let totalScore = 0;
+        let selectedRating = 0;
+
+        function displayQuestion() {
+            questionContainer.innerHTML = `<p>${questions[currentQuestionIndex]}</p>`;
+            ratingContainer.innerHTML = `
+                <div class="rating">
+                    <button data-value="1">1</button>
+                    <button data-value="2">2</button>
+                    <button data-value="3">3</button>
+                    <button data-value="4">4</button>
+                    <button data-value="5">5</button>
+                </div>
+            `;
+
+            const ratingButtons = ratingContainer.querySelectorAll('button');
+            ratingButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    selectedRating = parseInt(button.dataset.value);
+                    ratingButtons.forEach(btn => btn.classList.remove('selected'));
+                    button.classList.add('selected');
+                    nextBtn.disabled = false;
+                });
+            });
+
+            updateProgressBar();
+        }
+
+        function displayResult() {
+            let result;
+            if (totalScore >= 45) {
+                result = '<h2>Nível de maturidade: Excelente</h2><p>Parabéns! Sua empresa está operando em um nível de excelência. Continue aprimorando seus processos e inovando para manter-se à frente da concorrência.</p><p>Para melhorar sua maturidade empresarial, considere fazer um curso na Protagonize ou contratar um profissional para ajudar nos aspectos identificados.</p>';
+            } else if (totalScore >= 35) {
+                result = '<h2>Nível de maturidade: Bom</h2><p>Sua empresa está em uma boa posição, mas ainda há espaço para melhorias. Concentre-se em aprimorar seus processos e estratégias para atingir o nível de excelência.</p><p>Para melhorar sua maturidade empresarial, considere fazer um curso na Protagonize ou contratar um profissional para ajudar nos aspectos identificados.</p>';
+            } else if (totalScore >= 25) {
+                result = '<h2>Nível de maturidade: Regular</h2><p>A sua nota é ' + totalScore + '/50.</p><p>A sua gestão de negócios está dentro da média. Para alguns, isso é o suficiente. Mas para aqueles que querem conquistar novos mercados, perpetuar seus negócios e mudar o mundo, é preciso perseguir a excelência.</p><p>Veja algumas ações que você pode promover na sua companhia para começar potencializar os resultados atuais:</p><ul><li>🎚️Encontre alavancas de crescimento</li><li>📈 Otimize processos e métricas</li><li>🏀Aprenda a delegar</li></ul><p>Para melhorar sua maturidade empresarial, considere fazer um curso na Protagonize ou contratar um profissional para ajudar nos aspectos identificados.</p>';
+            } else {
+                result = '<h2>Nível de maturidade: Insuficiente</h2><p>Sua empresa está enfrentando desafios significativos. É necessário rever seus processos e estratégias de forma abrangente para alcançar um nível de maturidade mais satisfatório.</p><p>Para melhorar sua maturidade empresarial, considere fazer um curso na Protagonize ou contratar um profissional para ajudar nos aspectos identificados.</p>';
+            }
+            resultDiv.innerHTML = result;
+        }
+
+        function updateProgressBar() {
+            const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+            progressBarFill.style.width = `${progress}%`;
+            progressBarText.textContent = `${currentQuestionIndex + 1}/${questions.length}`;
+        }
+
+        displayQuestion();
+
+        nextBtn.addEventListener('click', () => {
+            totalScore += selectedRating;
+            selectedRating = 0;
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                displayQuestion();
+                nextBtn.disabled = true;
+            } else {
+                displayResult();
+                nextBtn.disabled = true;
+            }
+        });
+    </script>
+</body>
+</html>
