@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico de Maturidade Empresarial</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        .question {
+            margin-bottom: 30px;
+            padding: 25px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+        .question:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .question p {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        .options {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 12px 20px;
+            border: none;
+            background-color: #3498db;
+            color: white;
+            cursor: pointer;
+            border-radius: 25px;
+            transition: background-color 0.3s, transform 0.2s;
+            margin: 5px;
+            font-size: 1em;
+            flex-grow: 1;
+            text-align: center;
+        }
+        button:hover {
+            background-color: #2980b9;
+            transform: scale(1.05);
+        }
+        #result {
+            text-align: center;
+            font-size: 1.3em;
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #e8f4fd;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .hidden {
+            display: none;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .progress {
+            width: 0;
+            height: 100%;
+            background-color: #3498db;
+            transition: width 0.5s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Diagnóstico de Maturidade Empresarial</h1>
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        <div id="questions">
+            <div class="question" id="q1">
+                <p>1. Empresas que migram da tradicional gestão departamental para organizar e gerenciar suas atividades por Processo, alcançam uma gestão mais ágil, maximizam seus resultados e reduzem seus custos.</p>
+                <p>Na sua avaliação, como sua Empresa está posicionada em relação à Gestão por Processos?</p>
+                <div class="options">
+                    <button onclick="answer(1, 1)">1 - Ruim</button>
+                    <button onclick="answer(1, 2)">2</button>
+                    <button onclick="answer(1, 3)">3 - Mediana</button>
+                    <button onclick="answer(1, 4)">4</button>
+                    <button onclick="answer(1, 5)">5 - Ótima</button>
+                </div>
+            </div>
+            <div class="question hidden" id="q2">
+                <p>2. Para atingir seus objetivos, as Empresas têm buscado garantir que seus Processos de Negócio reflitam as diretrizes estratégicas.</p>
+                <p>Como você avalia a sua Organização em relação ao alinhamento dos seus Processos de Negócio à Estratégia?</p>
+                <div class="options">
+                    <button onclick="answer(2, 1)">1 - Ruim</button>
+                    <button onclick="answer(2, 2)">2</button>
+                    <button onclick="answer(2, 3)">3 - Mediana</button>
+                    <button onclick="answer(2, 4)">4</button>
+                    <button onclick="answer(2, 5)">5 - Ótima</button>
+                </div>
+            </div>
+            <div class="question hidden" id="q3">
+                <p>3. Mercados mais globalizados e dinâmicos exigem que as Empresas potencializem seus Processos de Negócio a partir de uma visão de Riscos, Conformidades e controle de Fraudes.</p>
+                <p>Na sua avaliação, os Processos de Negócio de sua Empresa refletem os controles de Riscos, Conformidade e Fraudes exigidos?</p>
+                <div class="options">
+                    <button onclick="answer(3, 1)">1 - Não</button>
+                    <button onclick="answer(3, 2)">2 - Parcialmente</button>
+                    <button onclick="answer(3, 3)">3</button>
+                    <button onclick="answer(3, 4)">4</button>
+                    <button onclick="answer(3, 5)">5 - Sim</button>
+                </div>
+            </div>
+            <div class="question hidden" id="q4">
+                <p>4. Você já passou da metade! Agora falta pouco...</p>
+                <p>Empresas competitivas conhecem, investem e gerenciam a eficiência dos principais Processos de seu Negócio, buscando a Excelência no Desempenho Organizacional.</p>
+                <p>Como você avalia o nível de eficiência dos principais Processos de Negócio da sua Empresa?</p>
+                <div class="options">
+                    <button onclick="answer(4, 1)">1 - Ruim</button>
+                    <button onclick="answer(4, 2)">2</button>
+                    <button onclick="answer(4, 3)">3 - Mediano</button>
+                    <button onclick="answer(4, 4)">4</button>
+                    <button onclick="answer(4, 5)">5 - Ótimo</button>
+                </div>
+            </div>
+            <div class="question hidden" id="q5">
+                <p>5. Mais do que realizar uma revisão dos seus Processos de trabalho, as Empresas maduras em Gestão de Processos adotam iniciativas permanentes para monitorar, avaliar e melhorar suas atividades.</p>
+                <p>Com que frequência sua Empresa monitora e revisa seus Processos de Negócio?</p>
+                <div class="options">
+                    <button onclick="answer(5, 1)">1 - Nunca</button>
+                    <button onclick="answer(5, 2)">2</button>
+                    <button onclick="answer(5, 3)">3 - Eventualmente</button>
+                    <button onclick="answer(5, 4)">4</button>
+                    <button onclick="answer(5, 5)">5 - Sempre</button>
+                </div>
+            </div>
+            <div class="question hidden" id="q6">
+                <p>6. Empresas maduras formalizam seus Processos através de instrumentos normativos e capacitam suas equipes a fim de potencializar seus resultados.</p>
+                <p>Como você avalia sua Empresa com relação à formalização e treinamento das equipes nos Processos de Negócio?</p>
+                <div class="options">
+                    <button onclick="answer(6, 1)">1 - Baixo</button>
+                    <button onclick="answer(6, 2)">2</button>
+                    <button onclick="answer(6, 3)">3 - Mediano</button>
+                    <button onclick="answer(6, 4)">4</button>
+                    <button onclick="answer(6, 5)">5 - Alto</button>
+                </div>
+            </div>
+            <div class="question hidden" id="q7">
+                <p>7. Redução de custos e agilidade na tomada de decisões são alguns dos benefícios do uso de ferramentas que apoiam a documentação, automação e monitoramento dos Processos das Organizações.</p>
+                <p>Na sua Empresa qual o nível de utilização de Softwares para apoiar à Gestão de Processos de Negócio?</p>
+                <div class="options">
+                    <button onclick="answer(7, 1)">1 - Ruim</button>
+                    <button onclick="answer(7, 2)">2</button>
+                    <button onclick="answer(7, 3)">3 - Mediano</button>
+                    <button onclick="answer(7, 4)">4</button>
+                    <button onclick="answer(7, 5)">5 - Ótimo</button>
+                </div>
+            </div>
+        </div>
+        <div id="result" class="hidden"></div>
+    </div>
+
+    <script>
+        let currentQuestion = 1;
+        let totalScore = 0;
+        const totalQuestions = 7;
+
+        function answer(question, score) {
+            totalScore += score;
+            document.getElementById(`q${question}`).classList.add('hidden');
+            if (question < totalQuestions) {
+                document.getElementById(`q${question + 1}`).classList.remove('hidden');
+                updateProgress(question + 1);
+            } else {
+                showResult();
+            }
+        }
+
+        function updateProgress(questionNumber) {
+            const progressPercentage = (questionNumber / totalQuestions) * 100;
+            document.getElementById('progress').style.width = `${progressPercentage}%`;
+        }
+
+        function showResult() {
+            const averageScore = (totalScore / totalQuestions).toFixed(2);
+            let resultText = `<h2>Resultado Final</h2>`;
+            resultText += `<p>Sua pontuação média é: <strong>${averageScore}</strong></p>`;
+
+            if (averageScore < 2) {
+                resultText += "<p>Sua empresa está em um estágio inicial de maturidade em gestão de processos. Há muito espaço para melhorias.</p>";
+            } else if (averageScore < 3) {
+                resultText += "<p>Sua empresa está em um estágio intermediário de maturidade em gestão de processos. Existem áreas que podem ser aprimoradas.</p>";
+            } else if (averageScore < 4) {
+                resultText += "<p>Sua empresa tem uma boa maturidade em gestão de processos, mas ainda pode melhorar em alguns aspectos.</p>";
+            } else {
+                resultText += "<p>Parabéns! Sua empresa demonstra uma excelente maturidade em gestão de processos.</p>";
+            }
+
+            document.getElementById('result').innerHTML = resultText;
+            document.getElementById('result').classList.remove('hidden');
+            document.getElementById('questions').classList.add('hidden');
+            document.querySelector('.progress-bar').classList.add('hidden');
+        }
+
+        // Initialize the first question and progress bar
+        updateProgress(1);
+    </script>
+</body>
+</html>
